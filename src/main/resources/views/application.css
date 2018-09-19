@@ -1,0 +1,67 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+
+.root {
+     -fx-background-image: url("background.jpg");
+     -fx-background-color: #fff;
+}
+
+.juego {
+     -fx-background-image: url("laberinto.jpg");
+     -fx-background-color: #fff;
+}
+
+.personaje {
+     -fx-background-image: url("personaje.png");
+     -fx-background-color: #fff;
+}
+
+
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+#welcome-text {
+   -fx-font-size: 32px;
+   -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+   -fx-fill: #333333;
+   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+#login-text {
+   -fx-font-size: 16px;
+   -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+   -fx-fill: #818181;
+   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+#actiontarget {
+  -fx-fill: FIREBRICK;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );  
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#fcda59,#fcda59);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#fcda59, #685723);
+}
+
+.label {
+  -fx-font-weight: 400; 
+  -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+}
+
+#footer{
+	-fx-background-color: linear-gradient(#fcda59, #685723);
+}
+

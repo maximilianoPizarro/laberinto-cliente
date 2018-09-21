@@ -48,6 +48,7 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 
 import com.modelo.User;
+import com.negocio.Cliente;
 import com.negocio.Facade;
 import com.negocio.UserABM;
 
@@ -94,23 +95,18 @@ public class AppController extends Thread implements Initializable {
 
 	@FXML
 	private Label errorLogin;
-	
+
 	@FXML
 	private Label copyright;
-	
 
 	@FXML
 	private ListView<String> list = new ListView<String>();
 
 	@FXML
 	private Pane root;
-	
 
 	@FXML
 	private AnchorPane container;
-	
-	
-
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) {
@@ -128,17 +124,20 @@ public class AppController extends Thread implements Initializable {
 		UserABM usuario = sistema.getUserABM();
 
 		try {
-		//	User user = usuario.existeUsuario(usuarioText.getText(), passwordText.getText());
-			
+			// User user = usuario.existeUsuario(usuarioText.getText(),
+			// passwordText.getText());
+
 			User user = new User();
 			user.setFirstName("usuarioNombre");
 			user.setLastName("usuarioApellido");
 			user.setId(1);
 			if (user != null) {
+				Cliente cliente = Cliente.getInstance();
+				cliente.conectar();
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/bienvenido.fxml"));
 				Parent rt = loader.load();
 				BienvenidoController controller = loader.<BienvenidoController>getController();
-				controller.setUsername("Bienvenido: " + user.getFirstName() + " " + user.getLastName()+"="+user.getId());
+				controller.setUsername("Bienvenido: " + user.getFirstName() + " " + user.getLastName() + "=" + user.getId());
 				root.getScene().setRoot(rt);
 				// BienvenidoController controller = new
 				// BienvenidoController("maxpizarro");
@@ -150,24 +149,20 @@ public class AppController extends Thread implements Initializable {
 			copyright.setVisible(false);
 			errorLogin.setVisible(true);
 			errorLogin.setAlignment(Pos.CENTER_LEFT);
-			//errorLogin.setText("Usuario o contraseña incorrectos.");	
-			errorLogin.setText(e1.getMessage());		
+			// errorLogin.setText("Usuario o contraseña incorrectos.");
+			errorLogin.setText(e1.getMessage());
 		}
-		
-		
-		
+
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) { // TODO }
-		
+
 	}
 
 	@Override
 	public void run() {
-	
-			errorLogin.setText("");
-				
+		errorLogin.setText("");
 	}
 
 	@FXML
@@ -175,18 +170,18 @@ public class AppController extends Thread implements Initializable {
 
 		Stage stage = (Stage) root.getScene().getWindow();
 		stage.close();
+		System.exit(1);
 
 	}
 
 	@FXML
 	protected void acercaDe(ActionEvent event) {
-		copyright.setVisible(true);	
+		copyright.setVisible(true);
 		errorLogin.setVisible(true);
 		errorLogin.setText("UNLa 1.0");
 		errorLogin.setAlignment(Pos.CENTER);
 		copyright.setText("Universidad Nacional de Lanús, Redes y Comunicaciónes 2018");
 		copyright.setAlignment(Pos.CENTER);
 	}
-
 
 }

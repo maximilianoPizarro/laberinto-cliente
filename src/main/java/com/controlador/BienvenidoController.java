@@ -33,14 +33,19 @@
 package com.controlador;
 
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.negocio.Cliente;
+import com.negocio.Semaforo;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -101,16 +106,29 @@ public class BienvenidoController implements Initializable{
 			personaje.setTranslateY(personaje.getTranslateY() - 1);
 		if (event.getCode() == KeyCode.DOWN)
 			personaje.setTranslateY(personaje.getTranslateY() + 1);
+		
+		new Thread(new Semaforo(personaje.getTranslateX() + ":" + personaje.getTranslateY())).start();
 
-		System.out.println(personaje.getTranslateX() + ":" + personaje.getTranslateY());
+		//System.out.println(personaje.getTranslateX() + ":" + personaje.getTranslateY());
+		//System.out.println(personaje);
 	}
 	
 
 	@FXML
-	protected void salir(ActionEvent event) {
+	protected void salir(ActionEvent event) throws IOException {
+		 Cliente cliente=Cliente.getInstance();
 
-		Stage stage = (Stage) juego.getScene().getWindow();
-		stage.close();
+         try {        	 	
+				cliente.desconectar();
+				cliente.clear();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+         
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/index.fxml"));
+	    Parent rt = loader.load();
+		juego.getScene().setRoot(rt);
+		AppController controller = loader.<AppController>getController();
 
 	}
 

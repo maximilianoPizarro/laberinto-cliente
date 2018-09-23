@@ -2,6 +2,7 @@ package com.test;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -19,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.funciones.LongValue;
+import com.modelo.Laberinto;
 import com.funciones.IntValue;
 
 import java.util.Scanner;
@@ -74,61 +76,55 @@ public class Example5 extends Application
         gc.setStroke( Color.BLACK );
         gc.setLineWidth(1);
         
-        ArrayList<Sprite> moneybagList = new ArrayList<Sprite>();
-        ArrayList<Sprite> cespedbagList = new ArrayList<Sprite>();
-        ArrayList<Sprite> guardiabagList = new ArrayList<Sprite>();
+        ArrayList<Sprite> caminos = new ArrayList<Sprite>();
+        ArrayList<Sprite> ladrillos = new ArrayList<Sprite>();
+        ArrayList<Sprite> guardias = new ArrayList<Sprite>();
+        ArrayList<Sprite> oros = new ArrayList<Sprite>();
+        ArrayList<Sprite> llaves = new ArrayList<Sprite>();
         
-        File f = new File("C:/Users/nicolas/Documents/Facultad/redes/Proyecto/laberinto-cliente/src/main/resources/views/pared.config");
-        try  (Scanner entrada = new Scanner(f)) {
-
-            while (entrada.hasNextInt()) { //mientras queden enteros por leer
-                Sprite moneybag = new Sprite();
-               moneybag.setImage("views/ladrillo.png");
-               double px = entrada.nextInt(); //se lee un entero del archivo
-               double py = entrada.nextInt(); //se lee un entero del archivo
-               moneybag.setPosition(px,py);
-               moneybagList.add( moneybag );
-               
-            }
-        } catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        Laberinto l = new Laberinto();
+		l.rellenarLaberinto();
+		l.dibujar();
         
-        f = new File("C:/Users/nicolas/Documents/Facultad/redes/Proyecto/laberinto-cliente/src/main/resources/views/guardia.config");
-		try (Scanner entrada = new Scanner(f)) {
-			while (entrada.hasNextInt()) { // mientras queden enteros por leer
-				Sprite guardia = new Sprite();
-				guardia.setImage("views/guardia.png");
-				double px = entrada.nextInt(); // se lee un entero del archivo
-				double py = entrada.nextInt(); // se lee un entero del archivo
-				   guardia.setPosition(px,py);
-               cespedbagList.add( guardia );
-            }
-        } catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		for ( int i = 0 ; i < 10 ; i++) {
+			for ( int j = 0 ; j < 10 ; j++) {
+				char elemento = l.getCeldas()[j][i];
+				Sprite elementoSprite = new Sprite();
+				switch (elemento) {
+				case 'P':
+					elementoSprite.setImage("views/ladrillo.png");
+					elementoSprite.setPosition(j*50,i*50);
+					ladrillos.add( elementoSprite );
+					break;
+				case 'C':
+					elementoSprite.setImage("views/cesped.png");
+					elementoSprite.setPosition(j*50,i*50);
+					caminos.add( elementoSprite );
+					break;
+				case 'G':
+					elementoSprite.setImage("views/guardia.png");
+					elementoSprite.setPosition(j*50,i*50);
+					guardias.add( elementoSprite );
+					break;
+				case 'O':
+					elementoSprite.setImage("views/oro.png");
+					elementoSprite.setPosition(j*50,i*50);
+					oros.add( elementoSprite );
+					break;
+				case 'L':
+					elementoSprite.setImage("views/llave.png");
+					elementoSprite.setPosition(j*50,i*50);
+					llaves.add( elementoSprite );
+					break;
+				}
+				
+			}
 		}
-		
-		f = new File("C:/Users/nicolas/Documents/Facultad/redes/Proyecto/laberinto-cliente/src/main/resources/views/cesped.config");
-		try (Scanner entrada = new Scanner(f)) {
-			while (entrada.hasNextInt()) { // mientras queden enteros por leer
-				Sprite cesped = new Sprite();
-				cesped.setImage("views/cesped.png");
-				double px = entrada.nextInt(); // se lee un entero del archivo
-				double py = entrada.nextInt(); // se lee un entero del archivo
-				   cesped.setPosition(px,py);
-               cespedbagList.add( cesped );
-            }
-        } catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        
+				
         Sprite briefcase = new Sprite();
         briefcase.setImage("views/personaje.png");
         briefcase.setPosition(0, 0);
-        
+                
         LongValue lastNanoTime = new LongValue( System.nanoTime() );
 
         IntValue score = new IntValue(0);
@@ -143,8 +139,8 @@ public class Example5 extends Application
                 
                 // game logic
                 
-                //analizo posiciones cercanas
-                               
+                //analizo posiciones cercanas?
+                
                 briefcase.setVelocity(0,0);
                 if (input.contains("LEFT"))
                     briefcase.addVelocity(-50,0);
@@ -156,13 +152,12 @@ public class Example5 extends Application
                     briefcase.addVelocity(0,50);
                     
                 briefcase.update(elapsedTime);
-                
+                                
                 // collision detection con "PARED"
-                
-                Iterator<Sprite> moneybagIter = moneybagList.iterator();
-                while ( moneybagIter.hasNext() )
+                Iterator<Sprite> ladrillosIter = ladrillos.iterator();
+                while ( ladrillosIter.hasNext() )
                 {
-                    Sprite moneybag = moneybagIter.next();
+                    Sprite moneybag = ladrillosIter.next();
                     if ( briefcase.intersects(moneybag) )
                     {
                     	briefcase.setVelocity(0,0);
@@ -178,21 +173,61 @@ public class Example5 extends Application
                         briefcase.update(elapsedTime);
                     }
                 }
+                //Coleccion con Guardia
+                Iterator<Sprite> guardiasIter = guardias.iterator();
+                while ( guardiasIter.hasNext() )
+                {
+                    Sprite guardia = guardiasIter.next();
+                    if ( briefcase.intersects(guardia) )
+                    {
+                    	guardiasIter.remove();
+                    	Sprite camino = new Sprite();
+                    	camino.setImage("views/cesped.png");
+                    	camino.setPosition(guardia.getX(),guardia.getY());
+    					caminos.add( camino );
+    					score.value--;
+                        
+                    }
+                }
+              //Colision con oros
+                Iterator<Sprite> orosIter = oros.iterator();
+                while ( orosIter.hasNext() )
+                {
+                    Sprite oro = orosIter.next();
+                    if ( briefcase.intersects(oro) )
+                    {
+                    	Sprite camino = new Sprite();
+                    	camino.setImage("views/cesped.png");
+                    	camino.setPosition(oro.getX(),oro.getY());
+    					caminos.add( camino );
+    					score.value--;
+                        orosIter.remove();
+                        score.value++;
+                    }
+                }
                 
                 // render
                 
                 gc.clearRect(0, 0, 512,512);
                 
-                for (Sprite moneybag : moneybagList )
-                    moneybag.render( gc );
-                
-                for (Sprite cespedbag : cespedbagList )
-                    cespedbag.render( gc );
-                
-                for (Sprite guardiabag : guardiabagList )
-                    guardiabag.render( gc );
+                for (Sprite elementoLaberinto : caminos ) 
+                	elementoLaberinto.render( gc );
+                for (Sprite elementoLaberinto : ladrillos )
+                	elementoLaberinto.render( gc );
+                for (Sprite elementoLaberinto : guardias ) {
+            		elementoLaberinto.render( gc );
+                }
+                for (Sprite elementoLaberinto : llaves )
+                	elementoLaberinto.render( gc );
+                for (Sprite elementoLaberinto : oros )
+                	elementoLaberinto.render( gc );
+
                 
                 briefcase.render( gc );
+                
+                String pointsText = "ORO: $" + (100 * score.value);
+                gc.fillText( pointsText, 360, 36 );
+                gc.strokeText( pointsText, 360, 36 );
 
             }
         }.start();

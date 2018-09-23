@@ -13,6 +13,14 @@ public class Sprite
     private double velocityY;
     private double width;
     private double height;
+    
+    public double getX() {
+    	return positionX;
+    }
+    
+    public double getY() {
+    	return positionY;
+    }
 
     public Sprite()
     {

@@ -41,7 +41,7 @@ public class Cliente {
 			enviarDato(ipCliente() + " se ha conectado.");
 		} catch (IOException e) {
 			System.err.println("no se pudo conectar con el servidor");
-			System.exit(1);
+		//	System.exit(1);
 		}
 		System.out.println("conectado");
 

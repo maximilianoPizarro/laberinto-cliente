@@ -331,6 +331,7 @@ public class BienvenidoController implements Initializable {
 		}
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/index.fxml"));
+		juego.getChildren().remove(canvas);
 		Parent rt = loader.load();
 		juego.getScene().setRoot(rt);
 		AppController controller = loader.<AppController>getController();

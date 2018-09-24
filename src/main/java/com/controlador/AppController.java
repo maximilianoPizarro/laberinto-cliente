@@ -131,19 +131,21 @@ public class AppController extends Thread implements Initializable {
 			user.setFirstName("usuarioNombre");
 			user.setLastName("usuarioApellido");
 			user.setId(1);
-			if (user != null) {
-				Cliente cliente = Cliente.getInstance();
-				cliente.conectar();
+			Cliente cliente = Cliente.getInstance();
+			cliente.conectar();
+			
+			if (user != null && cliente.estaConectado()) {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/bienvenido.fxml"));
 				Parent rt = loader.load();
 				BienvenidoController controller = loader.<BienvenidoController>getController();
 				controller.setUsername("Bienvenido: " + user.getFirstName() + " " + user.getLastName() + "=" + user.getId());
 				root.getScene().setRoot(rt);
-				// BienvenidoController controller = new
-				// BienvenidoController("maxpizarro");
 
-				// stage.setScene(scene);
-
+			}else{
+				copyright.setVisible(false);
+				errorLogin.setVisible(true);
+				errorLogin.setAlignment(Pos.CENTER_LEFT);
+				errorLogin.setText("No se pudo conectar al servidor");
 			}
 		} catch (Exception e1) {
 			copyright.setVisible(false);

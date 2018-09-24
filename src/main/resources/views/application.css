@@ -7,7 +7,7 @@
 }
 
 .juego {
-     -fx-background-image: url("background2.jpg");
+     -fx-background-image: url("background.jpg");
      -fx-background-color: #fff;
 }
 
@@ -18,24 +18,24 @@
 
 
 .label {
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+    -fx-text-fill:  #A8EB12;
+    -fx-effect: dropshadow( gaussian , rgba(168,235,18,0.7) , 0,0,0,1 );
 }
 
 #welcome-text {
    -fx-font-size: 32px;
    -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
-   -fx-fill: #333333;
-   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+   -fx-fill: #A8EB12;
+   -fx-effect: innershadow( three-pass-box , rgba(168,235,18,0.7) , 6, 0.0 , 0 , 2 );
 }
 
 #login-text {
    -fx-font-size: 16px;
    -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
-   -fx-fill: #818181;
-   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+   -fx-fill: #A8EB12;
+   -fx-effect: innershadow( three-pass-box , rgba(168,235,18,0.7) , 6, 0.0 , 0 , 2 );
 }
 
 #actiontarget {

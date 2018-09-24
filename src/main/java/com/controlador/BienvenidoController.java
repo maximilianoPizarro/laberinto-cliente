@@ -32,6 +32,9 @@
 
 package com.controlador;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -65,6 +68,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -111,10 +116,12 @@ public class BienvenidoController implements Initializable {
 		run();
 	}
 
-	public void run() {
+	public void run(){
 		canvas.setFocusTraversable(true);
 		juego.getChildren().add(canvas);
 		
+    // For example
+		iniciarMusica();
 		
 		ArrayList<String> input = new ArrayList<String>();
 
@@ -343,6 +350,17 @@ public class BienvenidoController implements Initializable {
 		copyright.setVisible(true);
 		copyright.setText("Universidad Nacional de Lanús, Redes y Comunicaciónes 2018");
 		copyright.setAlignment(Pos.CENTER);
+	}
+	
+	public void iniciarMusica(){
+		try {
+			String musicFile = "file"+getClass().getResource("/views/soundtrack.mp3").toURI().toString().substring(7);
+			Media sound = new Media(musicFile.replace("\\", "/"));		
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
+		} catch (URISyntaxException e2) {
+			e2.printStackTrace();
+		} 
 	}
 
 }

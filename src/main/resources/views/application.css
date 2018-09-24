@@ -21,19 +21,25 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill:  #A8EB12;
+	-fx-stroke-width: 5;
+	-fx-stroke: green;
     -fx-effect: dropshadow( gaussian , rgba(168,235,18,0.7) , 0,0,0,1 );
 }
 
 #welcome-text {
    -fx-font-size: 32px;
-   -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+   -fx-font-family: Helvetica, Arial, sans-serif;
    -fx-fill: #A8EB12;
+   -fx-stroke-width: 2;
+   -fx-stroke: green;
    -fx-effect: innershadow( three-pass-box , rgba(168,235,18,0.7) , 6, 0.0 , 0 , 2 );
 }
 
 #login-text {
    -fx-font-size: 16px;
-   -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+   -fx-font-family: Helvetica, Arial, sans-serif;
+   -fx-stroke-width: 2;
+   -fx-stroke: green;
    -fx-fill: #A8EB12;
    -fx-effect: innershadow( three-pass-box , rgba(168,235,18,0.7) , 6, 0.0 , 0 , 2 );
 }
@@ -46,7 +52,7 @@
 
 .button {
     -fx-text-fill: white;
-    -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+    -fx-font-family: Helvetica, Arial, sans-serif;
     -fx-font-weight: bold;
     -fx-background-color: linear-gradient(#fcda59,#fcda59);
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
@@ -58,7 +64,9 @@
 
 .label {
   -fx-font-weight: 400; 
-  -fx-font-family: "CHANEWEI", Helvetica, Arial, sans-serif;
+  -fx-font-family: Helvetica, Arial, sans-serif;
+  -fx-stroke-width: 2;
+  -fx-stroke: green;
 }
 
 #footer{

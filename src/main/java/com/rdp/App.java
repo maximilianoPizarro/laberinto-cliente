@@ -43,11 +43,11 @@ public class App extends Application {
 		//Font.loadFont(getClass().getResource("/views/bastrap3/fonts/CHANEWEI.TTF").toExternalForm(), 10);
 		
 		firstTime = true;
-		Platform.setImplicitExit(false);
-		Scene scene = new Scene(root, 615, 374);
+		Platform.setImplicitExit(true);
+		Scene scene = new Scene(root, 600, 800);
 		stage.setTitle("UNLa");
-		stage.setMaxWidth(615);
-		stage.setMaxHeight(400);
+		stage.setMaxWidth(800);
+		stage.setMaxHeight(600);
 		
 		stage.setScene(scene);
 		stage.setResizable(false);

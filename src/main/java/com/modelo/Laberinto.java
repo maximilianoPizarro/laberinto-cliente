@@ -2,6 +2,7 @@ package com.modelo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -11,9 +12,9 @@ import com.test.Sprite;
 public class Laberinto {
 	private char[][] celdas;
 	
-	public  void rellenarLaberinto() {
+	public  void rellenarLaberinto() throws URISyntaxException {
 		this.celdas = new char[10][10]; 
-		File f = new File("C:/Users/nicolas/Documents/Facultad/redes/Proyecto/laberinto-cliente/src/main/resources/views/laberinto.config");
+		File f = new File(getClass().getResource("/views/laberinto.config").toURI().toString().substring(6));
         try  (Scanner entrada = new Scanner(f)) {
         	int i = 0;
         	int j = 0;

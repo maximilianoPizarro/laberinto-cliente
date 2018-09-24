@@ -17,6 +17,7 @@ import javafx.scene.input.KeyEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.funciones.LongValue;
@@ -34,7 +35,7 @@ public class Example5 extends Application
     }
 
     @Override
-    public void start(Stage theStage) 
+    public void start(Stage theStage) throws URISyntaxException 
     {
         theStage.setTitle( "Laberinto" );
 

@@ -38,7 +38,7 @@ public class Cliente {
 	public void conectar() {
 		try {
 			this.echoSocket.connect(this.remoteaddr);
-			enviarDato(ipCliente() + " se ha conectado.");
+			enviarDato( " se ha conectado.");
 		} catch (IOException e) {
 			System.err.println("no se pudo conectar con el servidor");
 		//	System.exit(1);
@@ -52,8 +52,8 @@ public class Cliente {
 	}
 
 	public void desconectar() throws IOException {
-		System.out.println("desconectado");
-		this.out.println(ipCliente() + " se ha desconectado.");
+		//System.out.println("desconectado");
+		this.out.println(" se ha desconectado.");
 		this.echoSocket.close();
 		this.out.close();
 	}

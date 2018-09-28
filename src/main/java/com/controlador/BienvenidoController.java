@@ -149,7 +149,7 @@ public class BienvenidoController implements Initializable {
 		gc.setFill(Color.GREEN);
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(1);
-
+		int distanciaVisible = 100;
 		ArrayList<Sprite> caminos = new ArrayList<Sprite>();
 		ArrayList<Sprite> ladrillos = new ArrayList<Sprite>();
 		ArrayList<Sprite> guardias = new ArrayList<Sprite>();
@@ -199,108 +199,136 @@ public class BienvenidoController implements Initializable {
 			}
 		}
 
-		Sprite briefcase = new Sprite();
-		briefcase.setImage("/views/personaje.png");
-		briefcase.setPosition(0, 0);
+		        Sprite briefcase = new Sprite();
+		        briefcase.setImage("views/personajecaminante.png");
+		        briefcase.setPosition(0, 0);
+		                
+		        LongValue lastNanoTime = new LongValue( System.nanoTime() );
 
-		LongValue lastNanoTime = new LongValue(System.nanoTime());
+		        IntValue score = new IntValue(0);
 
-		IntValue score = new IntValue(0);
+		        new AnimationTimer()
+		        {
+		            public void handle(long currentNanoTime)
+		            {
+		                // calculate time since last update.
+		                double elapsedTime = (currentNanoTime - lastNanoTime.value) / 1000000000.0;
+		                lastNanoTime.value = currentNanoTime;
+		                
+		                // game logic
+		                
+		                //analizo posiciones cercanas?
+		                
+		                briefcase.setVelocity(0,0);
+		                if (input.contains("LEFT")) {
+		                    briefcase.addVelocity(-50,0);
+		                }
+		                if (input.contains("RIGHT"))
+		                    briefcase.addVelocity(50,0);
+		                if (input.contains("UP"))
+		                    briefcase.addVelocity(0,-50);
+		                if (input.contains("DOWN"))
+		                    briefcase.addVelocity(0,50);
+		                    
+		                briefcase.update(elapsedTime);
+						if(!input.isEmpty())
+							new Thread(new Semaforo(briefcase.toString())).start();
 
-		new AnimationTimer() {
-			public void handle(long currentNanoTime) {
-				// calculate time since last update.
-				double elapsedTime = (currentNanoTime - lastNanoTime.value) / 1000000000.0;
-				lastNanoTime.value = currentNanoTime;
+		                                
+		                // collision detection con "PARED"
+		                Iterator<Sprite> ladrillosIter = ladrillos.iterator();
+		                while ( ladrillosIter.hasNext() )
+		                {
+		                    Sprite moneybag = ladrillosIter.next();
+		                    if ( briefcase.intersects(moneybag) )
+		                    {
+		                    	briefcase.setVelocity(0,0);
+		                        if (input.contains("LEFT"))
+		                            briefcase.addVelocity(50,0);
+		                        if (input.contains("RIGHT"))
+		                            briefcase.addVelocity(-50,0);
+		                        if (input.contains("UP"))
+		                            briefcase.addVelocity(0,50);
+		                        if (input.contains("DOWN"))
+		                            briefcase.addVelocity(0,-50);
+		                            
+		                        briefcase.update(elapsedTime);
+		                    }
+		                }
+		                //Coleccion con Guardia
+		                Iterator<Sprite> guardiasIter = guardias.iterator();
+		                while ( guardiasIter.hasNext() )
+		                {
+		                    Sprite guardia = guardiasIter.next();
+		                    if ( briefcase.intersects(guardia) )
+		                    {
+		                    	guardiasIter.remove();
+		                    	Sprite camino = new Sprite();
+		                    	camino.setImage("views/cesped.png");
+		                    	camino.setPosition(guardia.getX(),guardia.getY());
+		    					caminos.add( camino );
+		    					score.value--;
+		                        
+		                    }
+		                }
+		              //Colision con oros
+		                Iterator<Sprite> orosIter = oros.iterator();
+		                while ( orosIter.hasNext() )
+		                {
+		                    Sprite oro = orosIter.next();
+		                    if ( briefcase.intersects(oro) )
+		                    {
+		                    	Sprite camino = new Sprite();
+		                    	camino.setImage("views/cesped.png");
+		                    	camino.setPosition(oro.getX(),oro.getY());
+		    					caminos.add( camino );
+		    				//	score.value--;
+		                        orosIter.remove();
+		                        score.value++;
+		                    }
+		                }
+		                
+		                // render
+		                
+		                gc.clearRect(0, 0, 512,512);
+		                
+		                for (Sprite elementoLaberinto : caminos ) {
+		                    if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+		                    	elementoLaberinto.render( gc );	
+		                    }
+		                }
+		                for (Sprite elementoLaberinto : ladrillos ) {
+		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {	
+		                		elementoLaberinto.render( gc );
+		                	}
+		                }
+		                for (Sprite elementoLaberinto : guardias ) {
+		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+		                		elementoLaberinto.render( gc );
+		                	}
+		                }
+		                for (Sprite elementoLaberinto : llaves ) {
+		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+		                		elementoLaberinto.render( gc );
+		                	}
+		                }
+		                for (Sprite elementoLaberinto : oros ) {
+		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {		
+		                		elementoLaberinto.render( gc );
+		                	}
+		                }
+		                briefcase.render( gc );
+		                
+		                String pointsText = "ORO: $" + (100 * score.value);
+		                gc.fillText( pointsText, 360, 36 );
+		                gc.strokeText( pointsText, 360, 36 );
 
-				// game logic
-
-				// analizo posiciones cercanas?
-				
-				briefcase.setVelocity(0, 0);
-				if (input.contains("LEFT"))
-					briefcase.addVelocity(-50, 0);
-				if (input.contains("RIGHT"))
-					briefcase.addVelocity(50, 0);
-				if (input.contains("UP"))
-					briefcase.addVelocity(0, -50);
-				if (input.contains("DOWN"))
-					briefcase.addVelocity(0, 50);
-				
-				briefcase.update(elapsedTime);
-				if(!input.isEmpty())
-					new Thread(new Semaforo(briefcase.toString())).start();
-
-				// collision detection con "PARED"
-				Iterator<Sprite> ladrillosIter = ladrillos.iterator();
-				while (ladrillosIter.hasNext()) {
-					Sprite moneybag = ladrillosIter.next();
-					if (briefcase.intersects(moneybag)) {
-						briefcase.setVelocity(0, 0);
-						if (input.contains("LEFT"))
-							briefcase.addVelocity(50, 0);
-						if (input.contains("RIGHT"))
-							briefcase.addVelocity(-50, 0);
-						if (input.contains("UP"))
-							briefcase.addVelocity(0, 50);
-						if (input.contains("DOWN"))
-							briefcase.addVelocity(0, -50);
-
-						briefcase.update(elapsedTime);
-					}
-				}
-				// Coleccion con Guardia
-				Iterator<Sprite> guardiasIter = guardias.iterator();
-				while (guardiasIter.hasNext()) {
-					Sprite guardia = guardiasIter.next();
-					if (briefcase.intersects(guardia)) {
-						guardiasIter.remove();
-						Sprite camino = new Sprite();
-						camino.setImage("views/cesped.png");
-						camino.setPosition(guardia.getX(), guardia.getY());
-						caminos.add(camino);
-						score.value--;
-
-					}
-				}
-				// Colision con oros
-				Iterator<Sprite> orosIter = oros.iterator();
-				while (orosIter.hasNext()) {
-					Sprite oro = orosIter.next();
-					if (briefcase.intersects(oro)) {
-						Sprite camino = new Sprite();
-						camino.setImage("/views/cesped.png");
-						camino.setPosition(oro.getX(), oro.getY());
-						caminos.add(camino);
-						//score.value--;
-						orosIter.remove();
-						score.value++;
-					}
-				}
-
-				// render
-
-				gc.clearRect(0, 0, 512, 512);
-
-				for (Sprite elementoLaberinto : caminos)
-					elementoLaberinto.render(gc);
-				for (Sprite elementoLaberinto : ladrillos)
-					elementoLaberinto.render(gc);
-				for (Sprite elementoLaberinto : guardias) {
-					elementoLaberinto.render(gc);
-				}
-				for (Sprite elementoLaberinto : llaves)
-					elementoLaberinto.render(gc);
-				for (Sprite elementoLaberinto : oros)
-					elementoLaberinto.render(gc);
-
-				briefcase.render(gc);
-
-				String pointsText = "ORO: $" + (100 * score.value);
-				gc.fillText(pointsText, 360, 36);
-				gc.strokeText(pointsText, 360, 36);
-
-			}
+		            }
 		}.start();
 		
 		

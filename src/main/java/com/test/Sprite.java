@@ -21,13 +21,14 @@ public class Sprite
     public double getY() {
     	return positionY;
     }
-
+    
     public Sprite()
     {
         positionX = 0;
         positionY = 0;    
         velocityX = 0;
         velocityY = 0;
+        
     }
 
     public void setImage(Image i)
@@ -41,6 +42,7 @@ public class Sprite
     {
         Image i = new Image(filename);
         setImage(i);
+        
     }
 
     public void setPosition(double x, double y)

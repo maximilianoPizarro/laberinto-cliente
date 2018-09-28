@@ -37,6 +37,7 @@ public class Example5 extends Application
     @Override
     public void start(Stage theStage) throws URISyntaxException 
     {
+    	int distanciaVisible = 100;
         theStage.setTitle( "Laberinto" );
 
         Group root = new Group();
@@ -123,7 +124,7 @@ public class Example5 extends Application
 		}
 				
         Sprite briefcase = new Sprite();
-        briefcase.setImage("views/personaje.png");
+        briefcase.setImage("views/personajecaminante.png");
         briefcase.setPosition(0, 0);
                 
         LongValue lastNanoTime = new LongValue( System.nanoTime() );
@@ -143,8 +144,9 @@ public class Example5 extends Application
                 //analizo posiciones cercanas?
                 
                 briefcase.setVelocity(0,0);
-                if (input.contains("LEFT"))
+                if (input.contains("LEFT")) {
                     briefcase.addVelocity(-50,0);
+                }
                 if (input.contains("RIGHT"))
                     briefcase.addVelocity(50,0);
                 if (input.contains("UP"))
@@ -211,19 +213,36 @@ public class Example5 extends Application
                 
                 gc.clearRect(0, 0, 512,512);
                 
-                for (Sprite elementoLaberinto : caminos ) 
-                	elementoLaberinto.render( gc );
-                for (Sprite elementoLaberinto : ladrillos )
-                	elementoLaberinto.render( gc );
-                for (Sprite elementoLaberinto : guardias ) {
-            		elementoLaberinto.render( gc );
+                for (Sprite elementoLaberinto : caminos ) {
+                    if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+                    	elementoLaberinto.render( gc );	
+                    }
                 }
-                for (Sprite elementoLaberinto : llaves )
-                	elementoLaberinto.render( gc );
-                for (Sprite elementoLaberinto : oros )
-                	elementoLaberinto.render( gc );
-
-                
+                for (Sprite elementoLaberinto : ladrillos ) {
+                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {	
+                		elementoLaberinto.render( gc );
+                	}
+                }
+                for (Sprite elementoLaberinto : guardias ) {
+                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+                		elementoLaberinto.render( gc );
+                	}
+                }
+                for (Sprite elementoLaberinto : llaves ) {
+                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+                		elementoLaberinto.render( gc );
+                	}
+                }
+                for (Sprite elementoLaberinto : oros ) {
+                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {		
+                		elementoLaberinto.render( gc );
+                	}
+                }
                 briefcase.render( gc );
                 
                 String pointsText = "ORO: $" + (100 * score.value);

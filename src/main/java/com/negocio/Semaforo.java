@@ -29,8 +29,9 @@ public class Semaforo implements Runnable {
             DISPONIBILIDAD.acquire();
             Cliente cliente=Cliente.getInstance();
             try {
-				cliente.enviarDato("Punto ("+this.nombre +")");
-				System.out.println("response: "+cliente.recibirDato());
+            		
+            		cliente.enviarDato(this.nombre);
+					//System.out.println("response: "+cliente.recibirDato());
 			} catch (IOException e) {
 				System.err.println("error en la capa de negocio");
 				System.exit(1);

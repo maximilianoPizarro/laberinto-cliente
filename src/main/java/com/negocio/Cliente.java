@@ -50,19 +50,23 @@ public class Cliente {
 	public boolean estaConectado() {
 		return this.echoSocket.isConnected();
 	}
+	
+	public boolean estaCerrada() {
+		return this.echoSocket.isClosed();
+	}
 
 	public void desconectar() throws IOException {
 		//System.out.println("desconectado");
-		this.out.println(" se ha desconectado.");
+		this.out.println("el cliente se ha desconectado.");
 		this.echoSocket.close();
 		this.out.close();
 	}
 
 	public void enviarDato(String request) throws IOException {
-		// this.out.flush();
+		//this.out.flush();
 		this.out = new PrintWriter(this.echoSocket.getOutputStream(), true);
 		this.out.println(request);
-		// System.out.print("request: " + request);
+		 //System.out.print("request: " + request);
 	}
 
 	public String recibirDato() throws IOException {

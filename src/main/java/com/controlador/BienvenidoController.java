@@ -231,7 +231,8 @@ public class BienvenidoController implements Initializable {
 		                    briefcase.addVelocity(0,50);
 		                    
 		                briefcase.update(elapsedTime);
-						if(!input.isEmpty())
+//envio coordenadas al servidor		               
+		                if(!input.isEmpty())
 							new Thread(new Semaforo(briefcase.toString())).start();
 
 		                                

@@ -1,4 +1,4 @@
-package com.test;
+package com.modelo;
 
 import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;

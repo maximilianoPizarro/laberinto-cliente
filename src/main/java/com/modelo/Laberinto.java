@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import com.test.Sprite;
-
 public class Laberinto {
 	private char[][] celdas;
 	

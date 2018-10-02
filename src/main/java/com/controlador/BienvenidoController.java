@@ -44,10 +44,13 @@ import java.util.ResourceBundle;
 
 import com.funciones.IntValue;
 import com.funciones.LongValue;
+import com.google.gson.Gson;
 import com.modelo.Laberinto;
+import com.modelo.Punto;
+import com.modelo.Sprite;
+import com.modelo.User;
 import com.negocio.Cliente;
 import com.negocio.Semaforo;
-import com.test.Sprite;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
@@ -119,7 +122,7 @@ public class BienvenidoController implements Initializable {
 	public void run(){
 		canvas.setFocusTraversable(true);
 		juego.getChildren().add(canvas);
-		
+		Cliente cliente = Cliente.getInstance();
     // For example
 		iniciarMusica();
 		
@@ -234,7 +237,14 @@ public class BienvenidoController implements Initializable {
 		                briefcase.update(elapsedTime);
 //envio coordenadas al servidor		               
 		                if(!input.isEmpty())
-							new Thread(new Semaforo(briefcase.toString())).start();
+							try {
+								//cliente.enviarDato(briefcase.toString());
+								cliente.enviarDato(new Gson().toJson(new Punto(briefcase.getX(),briefcase.getY()))); 
+							} catch (IOException e) {
+								System.out.println("error en la capa de negocio");
+							}//new Thread(new Semaforo(briefcase.toString())).start();
+		                	
+		                	
 
 		                                
 		                // collision detection con "PARED"

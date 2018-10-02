@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import com.funciones.LongValue;
 import com.modelo.Laberinto;
+import com.modelo.Sprite;
 import com.funciones.IntValue;
 
 import java.util.Scanner;

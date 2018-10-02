@@ -126,7 +126,7 @@ public class Example5 extends Application
         Sprite briefcase = new Sprite();
         briefcase.setImage("views/personajecaminante.png");
         briefcase.setPosition(0, 0);
-                
+        briefcase.setVisible();
         LongValue lastNanoTime = new LongValue( System.nanoTime() );
 
         IntValue score = new IntValue(0);
@@ -212,37 +212,43 @@ public class Example5 extends Application
                 // render
                 
                 gc.clearRect(0, 0, 512,512);
-                
+
                 for (Sprite elementoLaberinto : caminos ) {
                     if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
                     		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-                    	elementoLaberinto.render( gc );	
+                    	elementoLaberinto.setVisible();	
                     }
+                    elementoLaberinto.render( gc );
                 }
                 for (Sprite elementoLaberinto : ladrillos ) {
                 	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
                     		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {	
-                		elementoLaberinto.render( gc );
-                	}
+                		elementoLaberinto.setVisible();	
+                    }
+                    elementoLaberinto.render( gc );
                 }
                 for (Sprite elementoLaberinto : guardias ) {
                 	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
                     		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-                		elementoLaberinto.render( gc );
-                	}
+                		elementoLaberinto.setVisible();	
+                    }
+                    elementoLaberinto.render( gc );
                 }
                 for (Sprite elementoLaberinto : llaves ) {
                 	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
                     		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-                		elementoLaberinto.render( gc );
-                	}
+                		elementoLaberinto.setVisible();	
+                    }
+                    elementoLaberinto.render( gc );
                 }
                 for (Sprite elementoLaberinto : oros ) {
                 	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
                     		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {		
-                		elementoLaberinto.render( gc );
-                	}
+                		elementoLaberinto.setVisible();	
+                    }
+                    elementoLaberinto.render( gc );
                 }
+                
                 briefcase.render( gc );
                 
                 String pointsText = "ORO: $" + (100 * score.value);

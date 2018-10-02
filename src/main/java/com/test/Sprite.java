@@ -13,6 +13,7 @@ public class Sprite
     private double velocityY;
     private double width;
     private double height;
+    private boolean visible;
     
     public double getX() {
     	return positionX;
@@ -28,7 +29,7 @@ public class Sprite
         positionY = 0;    
         velocityX = 0;
         velocityY = 0;
-        
+        visible = false;
     }
 
     public void setImage(Image i)
@@ -68,10 +69,14 @@ public class Sprite
         positionX += velocityX * time;
         positionY += velocityY * time;
     }
+    public void setVisible() {
+    	this.visible= true;
+    }
 
     public void render(GraphicsContext gc)
     {
-        gc.drawImage( image, positionX, positionY );
+    	if (visible)
+    		gc.drawImage( image, positionX, positionY );
     }
 
     public Rectangle2D getBoundary()

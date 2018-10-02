@@ -202,6 +202,7 @@ public class BienvenidoController implements Initializable {
 		        Sprite briefcase = new Sprite();
 		        briefcase.setImage("views/personajecaminante.png");
 		        briefcase.setPosition(0, 0);
+		        briefcase.setVisible();
 		                
 		        LongValue lastNanoTime = new LongValue( System.nanoTime() );
 
@@ -296,32 +297,37 @@ public class BienvenidoController implements Initializable {
 		                for (Sprite elementoLaberinto : caminos ) {
 		                    if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
 		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-		                    	elementoLaberinto.render( gc );	
+		                    	elementoLaberinto.setVisible();	
 		                    }
+		                    elementoLaberinto.render( gc );
 		                }
 		                for (Sprite elementoLaberinto : ladrillos ) {
 		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
 		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {	
-		                		elementoLaberinto.render( gc );
-		                	}
+		                		elementoLaberinto.setVisible();	
+		                    }
+		                    elementoLaberinto.render( gc );
 		                }
 		                for (Sprite elementoLaberinto : guardias ) {
 		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
 		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-		                		elementoLaberinto.render( gc );
-		                	}
+		                		elementoLaberinto.setVisible();	
+		                    }
+		                    elementoLaberinto.render( gc );
 		                }
 		                for (Sprite elementoLaberinto : llaves ) {
 		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
 		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-		                		elementoLaberinto.render( gc );
-		                	}
+		                		elementoLaberinto.setVisible();	
+		                    }
+		                    elementoLaberinto.render( gc );
 		                }
 		                for (Sprite elementoLaberinto : oros ) {
 		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
 		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {		
-		                		elementoLaberinto.render( gc );
-		                	}
+		                		elementoLaberinto.setVisible();	
+		                    }
+		                    elementoLaberinto.render( gc );
 		                }
 		                briefcase.render( gc );
 		                

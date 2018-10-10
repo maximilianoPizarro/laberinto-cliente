@@ -123,6 +123,7 @@ public class BienvenidoController implements Initializable {
 		canvas.setFocusTraversable(true);
 		juego.getChildren().add(canvas);
 		Cliente cliente = Cliente.getInstance();
+
     // For example
 		iniciarMusica();
 		

@@ -128,13 +128,17 @@ public class AppController extends Thread implements Initializable {
 			// passwordText.getText());
 
 			User user = new User();
+			user.setSsoId(usuarioText.getText());
+			user.setPassword(passwordText.getText());
 			user.setFirstName("usuarioNombre");
 			user.setLastName("usuarioApellido");
 			user.setId(1);
 			Cliente cliente = Cliente.getInstance();
-			cliente.conectar();
+			if(!cliente.estaCerrada())
+				cliente.conectar(user);
+			//System.out.println(cliente.recibirDato());		
 			
-			if (user != null && cliente.estaConectado()) {
+			if (cliente.recibirDato().compareTo("autenticado")==0 && !cliente.estaCerrada()) {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/bienvenido.fxml"));
 				Parent rt = loader.load();
 				BienvenidoController controller = loader.<BienvenidoController>getController();
@@ -142,10 +146,11 @@ public class AppController extends Thread implements Initializable {
 				root.getScene().setRoot(rt);
 
 			}else{
+				cliente.clear();
 				copyright.setVisible(false);
 				errorLogin.setVisible(true);
 				errorLogin.setAlignment(Pos.CENTER_LEFT);
-				errorLogin.setText("No se pudo conectar al servidor");
+				errorLogin.setText("Usuario o contraseña incorrectos");
 			}
 		} catch (Exception e1) {
 			copyright.setVisible(false);

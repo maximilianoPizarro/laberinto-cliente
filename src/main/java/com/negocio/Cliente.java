@@ -10,6 +10,9 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+import com.modelo.User;
+
 public class Cliente {
 	private static String host = "127.0.0.1";
 	private static int port = 8081;
@@ -35,10 +38,10 @@ public class Cliente {
 		singleton = new Cliente(host, port);
 	}
 
-	public void conectar() {
+	public void conectar(User usuario) {
 		try {
 			this.echoSocket.connect(this.remoteaddr);
-			enviarDato( " se ha conectado.");
+			enviarDato(new Gson().toJson(usuario));
 		} catch (IOException e) {
 			System.err.println("no se pudo conectar con el servidor");
 		//	System.exit(1);
@@ -56,8 +59,8 @@ public class Cliente {
 	}
 
 	public void desconectar() throws IOException {
-		//System.out.println("desconectado");
-		this.out.println("el cliente se ha desconectado.");
+		System.out.println("desconectado");
+		this.out.println("desconectado");
 		this.echoSocket.close();
 		this.out.close();
 	}

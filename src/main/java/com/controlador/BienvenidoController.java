@@ -123,6 +123,12 @@ public class BienvenidoController implements Initializable {
 		canvas.setFocusTraversable(true);
 		juego.getChildren().add(canvas);
 		Cliente cliente = Cliente.getInstance();
+		
+		try {
+			System.out.println(cliente.recibirDato());
+		} catch (IOException e2) {
+			System.out.println("error al recibir el laberinto");
+		}
 
     // For example
 		iniciarMusica();

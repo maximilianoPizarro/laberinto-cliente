@@ -1,5 +1,7 @@
 package com.modelo;
 
+import com.funciones.Funciones;
+
 public class Punto {
 	
     private double positionX;
@@ -7,8 +9,8 @@ public class Punto {
     
 	public Punto(double positionX, double positionY) {
 		super();
-		this.positionX = positionX;
-		this.positionY = positionY;
+		this.positionX = Funciones.aproximar1Decimal(positionX);
+		this.positionY = Funciones.aproximar1Decimal(positionY);
 	}
 
 	public double getPositionX() {

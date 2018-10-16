@@ -147,6 +147,7 @@ public class AppController extends Thread implements Initializable {
 
 			}else{
 				cliente.clear();
+				cliente.desconectar();
 				copyright.setVisible(false);
 				errorLogin.setVisible(true);
 				errorLogin.setAlignment(Pos.CENTER_LEFT);
@@ -173,8 +174,8 @@ public class AppController extends Thread implements Initializable {
 	}
 
 	@FXML
-	protected void salir(ActionEvent event) {
-
+	protected void salir(ActionEvent event) throws IOException {
+		Cliente.getInstance().desconectar();
 		Stage stage = (Stage) root.getScene().getWindow();
 		stage.close();
 		System.exit(1);

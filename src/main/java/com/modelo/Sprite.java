@@ -29,7 +29,10 @@ public class Sprite
         positionY = 0;    
         velocityX = 0;
         velocityY = 0;
-        visible = false;
+        //visible = false;
+        width = 0;
+        height = 0;
+        visible = true; //si quisiera controlarlo desde lamatriz
     }
 
     public void setImage(Image i)
@@ -72,6 +75,14 @@ public class Sprite
     public void setVisible() {
     	this.visible= true;
     }
+	public void setInvisible() {
+		this.visible = false;
+	}
+
+	public boolean isVisible() {
+			return this.visible;
+	}
+
 
     public void render(GraphicsContext gc)
     {
@@ -94,4 +105,22 @@ public class Sprite
         return " Position: [" + positionX + "," + positionY + "]" 
         + " Velocity: [" + velocityX + "," + velocityY + "]";
     }
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean isEqual= false;
+
+        if (object != null && object instanceof Sprite)
+        {
+            isEqual = ((this.positionX == ((Sprite) object).positionX) && (this.positionY == ((Sprite) object).positionY));
+        }
+
+        return isEqual;
+    }
+    
+    @Override
+    public int hashCode() {
+        return (int) (this.positionX+this.positionY);
+    }
+
 }

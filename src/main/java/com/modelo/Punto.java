@@ -1,6 +1,7 @@
 package com.modelo;
 
 import com.funciones.Funciones;
+import com.google.gson.Gson;
 
 public class Punto {
 	
@@ -34,7 +35,9 @@ public class Punto {
 		return "Punto [positionX=" + positionX + ", positionY=" + positionY + "]";
 	}    
 	
-	
+	public String dibujarJson(){
+		return new Gson().toJson(this.positionX);
+	}
     
 
 }

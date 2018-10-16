@@ -51,6 +51,7 @@ import com.modelo.Sprite;
 import com.modelo.User;
 import com.negocio.Cliente;
 import com.negocio.Semaforo;
+import com.modelo.Punto;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
@@ -119,16 +120,46 @@ public class BienvenidoController implements Initializable {
 		run();
 	}
 
+	@SuppressWarnings("restriction")
 	public void run(){
+		Laberinto l = new Laberinto();
 		canvas.setFocusTraversable(true);
 		juego.getChildren().add(canvas);
 		Cliente cliente = Cliente.getInstance();
 		
 		try {
 			System.out.println(cliente.recibirDato());
+			System.out.println("recibo!");
+			
 		} catch (IOException e2) {
 			System.out.println("error al recibir el laberinto");
 		}
+		
+		
+		
+		//PEDIR dato a partir del punto
+		if(!cliente.estaCerrada()) {
+			try {
+				Punto p = new Punto(0,0);
+				cliente.enviarDato(new Gson().toJson(new Punto(0,0)));
+				System.out.println("ENVIO EL 0,0!");
+				//System.out.println(cliente.recibirDato());
+				l = new Gson().fromJson(cliente.recibirDato(),Laberinto.class);
+				
+				System.out.println("Recibo laberinto --> "); 
+				l.dibujar() ;
+				
+			//if (cliente.recibirDato().compareTo("")!=0 && !cliente.estaCerrada()) {
+				//RECIBO LA MATRIZ CORRESPONDIENTE AL PUNTO
+				//}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		
 
     // For example
 		iniciarMusica();
@@ -165,14 +196,16 @@ public class BienvenidoController implements Initializable {
 		ArrayList<Sprite> guardias = new ArrayList<Sprite>();
 		ArrayList<Sprite> oros = new ArrayList<Sprite>();
 		ArrayList<Sprite> llaves = new ArrayList<Sprite>();
+		Punto posicionAnterior = new Punto(0,0);
 
-		Laberinto l = new Laberinto();
-		try {
-			l.rellenarLaberinto();
-		} catch (URISyntaxException e1) {
-			e1.printStackTrace();
-		}
-		l.dibujar();
+		
+		//Laberinto l = new Laberinto();
+	//	try {
+		//	l.rellenarLaberinto();
+		//} catch (URISyntaxException e1) {
+//			e1.printStackTrace();
+	//	}
+		//l.dibujar();
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -204,6 +237,8 @@ public class BienvenidoController implements Initializable {
 					elementoSprite.setPosition(j * 50, i * 50);
 					llaves.add(elementoSprite);
 					break;
+				case 'X':  //COMO NO HAy Q BORRAR LO PISADO NO HAGO NADA
+					break;
 				}
 
 			}
@@ -217,11 +252,11 @@ public class BienvenidoController implements Initializable {
 		        LongValue lastNanoTime = new LongValue( System.nanoTime() );
 
 		        IntValue score = new IntValue(0);
-
+		   		        
 		        new AnimationTimer()
 		        {
 		            public void handle(long currentNanoTime)
-		            {
+		            {	
 		                // calculate time since last update.
 		                double elapsedTime = (currentNanoTime - lastNanoTime.value) / 1000000000.0;
 		                lastNanoTime.value = currentNanoTime;
@@ -243,17 +278,81 @@ public class BienvenidoController implements Initializable {
 		                    
 		                briefcase.update(elapsedTime);
 //envio coordenadas al servidor		               
-		                if(!input.isEmpty())
-							try {
-								//cliente.enviarDato(briefcase.toString());
-								cliente.enviarDato(new Gson().toJson(new Punto(briefcase.getX(),briefcase.getY()))); 
-							} catch (IOException e) {
-								System.out.println("error en la capa de negocio");
-							}//new Thread(new Semaforo(briefcase.toString())).start();
-		                	
-		                	
 
-		                                
+						try {
+							if ((((int)posicionAnterior.getPositionX()/ 50) - ((int)briefcase.getX() / 50) != 0) || (((int)posicionAnterior.getPositionY()/ 50) - ((int)briefcase.getY() / 50) != 0)) {
+								//System.out.println("comparo X: " + (posicionAnterior.getPositionX())+ " "  + (int)(briefcase.getX() / 50));
+								//System.out.println("comparo Y: " + (posicionAnterior.getPositionY())+ " "  + (briefcase.getY() / 50));
+								posicionAnterior.setPositionX((int)briefcase.getX()/1);
+								posicionAnterior.setPositionY((int)briefcase.getY()/1);
+								cliente.enviarDato(new Gson().toJson(new Punto(briefcase.getX(),briefcase.getY())));
+							//System.out.println(cliente.recibirDato());
+								Laberinto l = new Gson().fromJson(cliente.recibirDato(),Laberinto.class);
+								System.out.println("Recibo laberinto --> "); 
+								l.dibujar() ;
+								for (int i = 0; i < 10; i++) {
+									for (int j = 0; j < 10; j++) {
+										char elemento = l.getCeldas()[j][i];
+										Sprite elementoSprite = new Sprite();
+										switch (elemento) {
+										case 'P':
+											elementoSprite.setImage("/views/ladrillo.png");
+											elementoSprite.setPosition(j * 50, i * 50);
+											//System.out.println("ladrillos --> " + ladrillos);
+											if (!ladrillos.contains(elementoSprite)) {
+												ladrillos.add(elementoSprite);
+											}
+											break;
+										case 'C':
+											elementoSprite.setImage("/views/cesped.png");
+											elementoSprite.setPosition(j * 50, i * 50);
+											//System.out.println("caminos --> " +caminos);
+											if (!caminos.contains(elementoSprite)) {
+												caminos.add(elementoSprite);
+											}
+											break;
+										case 'G':
+											elementoSprite.setImage("/views/guardia.png");
+											elementoSprite.setPosition(j * 50, i * 50);
+											//System.out.println("guardias --> " +guardias);
+											if (!guardias.contains(elementoSprite)) {
+												guardias.add(elementoSprite);
+											}
+											break;
+										case 'O':
+											elementoSprite.setImage("/views/oro.png");
+											elementoSprite.setPosition(j * 50, i * 50);
+											//System.out.println("oros --> " +oros);
+											if (!oros.contains(elementoSprite)) {
+												oros.add(elementoSprite);
+											}
+											break;
+										case 'L':
+											elementoSprite.setImage("/views/llave.png");
+											elementoSprite.setPosition(j * 50, i * 50);
+											//System.out.println("llaves --> " +llaves);
+											if (!llaves.contains(elementoSprite)) {
+												llaves.add(elementoSprite);
+											}
+											break;
+										case 'X':  //COMO NO HAy Q BORRAR LO PISADO NO HAGO NADA
+											break;
+										}
+									}		
+								}
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+
+						
+						
+					//if (cliente.recibirDato().compareTo("")!=0 && !cliente.estaCerrada()) {
+						//RECIBO LA MATRIZ CORRESPONDIENTE AL PUNTO
+						//}
+       	
 		                // collision detection con "PARED"
 		                Iterator<Sprite> ladrillosIter = ladrillos.iterator();
 		                while ( ladrillosIter.hasNext() )
@@ -279,9 +378,10 @@ public class BienvenidoController implements Initializable {
 		                while ( guardiasIter.hasNext() )
 		                {
 		                    Sprite guardia = guardiasIter.next();
-		                    if ( briefcase.intersects(guardia) )
+		                    if ( briefcase.intersects(guardia) && guardia.isVisible())
 		                    {
-		                    	guardiasIter.remove();
+		                    	//guardiasIter.remove();
+		                    	guardia.setInvisible();	
 		                    	Sprite camino = new Sprite();
 		                    	camino.setImage("views/cesped.png");
 		                    	camino.setPosition(guardia.getX(),guardia.getY());
@@ -295,14 +395,15 @@ public class BienvenidoController implements Initializable {
 		                while ( orosIter.hasNext() )
 		                {
 		                    Sprite oro = orosIter.next();
-		                    if ( briefcase.intersects(oro) )
+		                    if ( briefcase.intersects(oro) && oro.isVisible())
 		                    {
 		                    	Sprite camino = new Sprite();
 		                    	camino.setImage("views/cesped.png");
 		                    	camino.setPosition(oro.getX(),oro.getY());
 		    					caminos.add( camino );
 		    				//	score.value--;
-		                        orosIter.remove();
+		                        //orosIter.remove();
+		    					oro.setInvisible();	
 		                        score.value++;
 		                    }
 		                }
@@ -326,25 +427,31 @@ public class BienvenidoController implements Initializable {
 		                    elementoLaberinto.render( gc );
 		                }
 		                for (Sprite elementoLaberinto : guardias ) {
-		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
-		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-		                		elementoLaberinto.setVisible();	
-		                    }
-		                    elementoLaberinto.render( gc );
+//		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+//		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+//		                		elementoLaberinto.setVisible();	
+//		                    }
+		                	if (elementoLaberinto.isVisible()) {
+		                		elementoLaberinto.render( gc );
+		                	}
 		                }
 		                for (Sprite elementoLaberinto : llaves ) {
-		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
-		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
-		                		elementoLaberinto.setVisible();	
-		                    }
-		                    elementoLaberinto.render( gc );
+//		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+//		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {
+//		                		elementoLaberinto.setVisible();	
+//		                    }
+		                	if (elementoLaberinto.isVisible()) {
+		                		elementoLaberinto.render( gc );
+		                	}
 		                }
 		                for (Sprite elementoLaberinto : oros ) {
-		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
-		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {		
-		                		elementoLaberinto.setVisible();	
-		                    }
-		                    elementoLaberinto.render( gc );
+//		                	if ((Math.abs(briefcase.getX() - elementoLaberinto.getX())) < distanciaVisible 
+//		                    		&& (Math.abs(briefcase.getY() - elementoLaberinto.getY())) < distanciaVisible) {		
+//		                		elementoLaberinto.setVisible();	
+//		                    }
+		                	if (elementoLaberinto.isVisible()) {
+		                		elementoLaberinto.render( gc );
+		                	}
 		                }
 		                briefcase.render( gc );
 		                

@@ -11,6 +11,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
+import com.modelo.Punto;
 import com.modelo.User;
 
 public class Cliente {
@@ -47,8 +48,19 @@ public class Cliente {
 		//	System.exit(1);
 		}
 		System.out.println("conectado");
-
 	}
+	
+	public void conectar(Punto p) {
+		try {
+			//this.echoSocket.connect(this.remoteaddr);
+			enviarDato(new Gson().toJson(p));
+		} catch (IOException e) {
+			System.err.println("no se pudo conectar con el servidor");
+		//	System.exit(1);
+		}
+		System.out.println("conectado");
+	}
+
 
 	public boolean estaConectado() {
 		return this.echoSocket.isConnected();
@@ -76,7 +88,7 @@ public class Cliente {
 		String response;
 		this.in = new BufferedReader(new InputStreamReader(this.echoSocket.getInputStream()));
 		response = this.in.readLine();
-		// System.out.print("response: " + response);
+		//System.out.print("response: " + response);
 		return response;
 	}
 
@@ -120,5 +132,6 @@ public class Cliente {
 		}
 		return lista;
 	}
+
 
 }

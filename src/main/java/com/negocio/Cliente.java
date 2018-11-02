@@ -133,5 +133,16 @@ public class Cliente {
 		return lista;
 	}
 
+	public void conectar() {
+		try {
+			this.echoSocket.connect(this.remoteaddr);
+		} catch (IOException e) {
+			System.err.println("no se pudo conectar con el servidor");
+		//	System.exit(1);
+		}
+		System.out.println("conectado");
+		
+	}
+
 
 }

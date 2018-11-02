@@ -102,6 +102,14 @@ public class AppController extends Thread implements Initializable {
 	@FXML
 	private ListView<String> list = new ListView<String>();
 
+	public Pane getRoot() {
+		return root;
+	}
+
+	public void setRoot(Pane root) {
+		this.root = root;
+	}
+
 	@FXML
 	private Pane root;
 
@@ -175,6 +183,13 @@ public class AppController extends Thread implements Initializable {
 
 	@FXML
 	protected void salir(ActionEvent event) throws IOException {
+		Cliente.getInstance().desconectar();
+		Stage stage = (Stage) root.getScene().getWindow();
+		stage.close();
+		System.exit(1);
+
+	}
+	protected void salir() throws IOException {
 		Cliente.getInstance().desconectar();
 		Stage stage = (Stage) root.getScene().getWindow();
 		stage.close();

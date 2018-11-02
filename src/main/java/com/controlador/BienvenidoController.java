@@ -79,6 +79,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import	javafx.stage.Popup;
+
+
 
 public class BienvenidoController implements Initializable {
 
@@ -105,7 +108,8 @@ public class BienvenidoController implements Initializable {
 
 	@FXML
 	public Canvas canvas= new Canvas( 512, 512 );
-
+	
+	public boolean encontroLlave = false;
 
 
 	public void setUsername(String dato) {
@@ -196,6 +200,7 @@ public class BienvenidoController implements Initializable {
 		ArrayList<Sprite> guardias = new ArrayList<Sprite>();
 		ArrayList<Sprite> oros = new ArrayList<Sprite>();
 		ArrayList<Sprite> llaves = new ArrayList<Sprite>();
+		ArrayList<Sprite> metas = new ArrayList<Sprite>();
 		Punto posicionAnterior = new Punto(0,0);
 
 		
@@ -237,13 +242,17 @@ public class BienvenidoController implements Initializable {
 					elementoSprite.setPosition(j * 50, i * 50);
 					llaves.add(elementoSprite);
 					break;
+				case 'M':
+					elementoSprite.setImage("/views/meta.png");
+					elementoSprite.setPosition(j * 50, i * 50);
+					metas.add(elementoSprite);
+					break;
 				case 'X':  //COMO NO HAy Q BORRAR LO PISADO NO HAGO NADA
 					break;
 				}
 
 			}
 		}
-
 		        Sprite briefcase = new Sprite();
 		        briefcase.setImage("views/personajecaminante.png");
 		        briefcase.setPosition(0, 0);
@@ -335,6 +344,13 @@ public class BienvenidoController implements Initializable {
 												llaves.add(elementoSprite);
 											}
 											break;
+										case 'M':
+											elementoSprite.setImage("/views/meta.png");
+											elementoSprite.setPosition(j * 50, i * 50);
+											if (!metas.contains(elementoSprite)) {
+												metas.add(elementoSprite);
+											}
+											break;
 										case 'X':  //COMO NO HAy Q BORRAR LO PISADO NO HAGO NADA
 											break;
 										}
@@ -373,7 +389,7 @@ public class BienvenidoController implements Initializable {
 		                        briefcase.update(elapsedTime);
 		                    }
 		                }
-		                //Coleccion con Guardia
+		                //Colision con Guardia
 		                Iterator<Sprite> guardiasIter = guardias.iterator();
 		                while ( guardiasIter.hasNext() )
 		                {
@@ -407,8 +423,37 @@ public class BienvenidoController implements Initializable {
 		                        score.value++;
 		                    }
 		                }
+		              //colision con llaves
+		                Iterator<Sprite> llavesIter = llaves.iterator();
+		                while ( llavesIter.hasNext() )
+		                {
+		                    Sprite llave = llavesIter.next();
+		                    if ( briefcase.intersects(llave) && llave.isVisible())
+		                    {
+		                    	Sprite camino = new Sprite();
+		                    	camino.setImage("views/cesped.png");
+		                    	camino.setPosition(llave.getX(),llave.getY());
+		    					caminos.add( camino );
+		    					llave.setInvisible();
+		    					encontroLlave = true;
+			                }
+	                    }
+		                //colision con metas
+		                Iterator<Sprite> metasIter = metas.iterator();
+		                while ( metasIter.hasNext() )
+		                {
+		                    Sprite meta = metasIter.next();
+		                    if ( briefcase.intersects(meta) && meta.isVisible())
+		                    {
+				                if (encontroLlave) {
+				                	//ACA EN REALIDAD GANA
+				                	Winner go = new Winner(canvas);
+				                }
+		                    }
+		                }
+
 		                
-		                // render
+		                //renderizado
 		                
 		                gc.clearRect(0, 0, 512,512);
 		                
@@ -453,11 +498,20 @@ public class BienvenidoController implements Initializable {
 		                		elementoLaberinto.render( gc );
 		                	}
 		                }
+		                for (Sprite elementoLaberinto : metas ) {
+		                	if (elementoLaberinto.isVisible()) {
+		                		elementoLaberinto.render( gc );
+		                	}
+		                }
+		                
 		                briefcase.render( gc );
 		                
 		                String pointsText = "ORO: $" + (100 * score.value);
 		                gc.fillText( pointsText, 360, 36 );
 		                gc.strokeText( pointsText, 360, 36 );
+		                if (score.value < 0) {
+		                	GameOver go = new GameOver(canvas);
+   		                }
 
 		            }
 		}.start();
@@ -521,5 +575,22 @@ public class BienvenidoController implements Initializable {
 			e2.printStackTrace();
 		} 
 	}
+	
+	protected void salir() throws IOException {
+		Cliente cliente = Cliente.getInstance();
 
+		try {
+			cliente.desconectar();
+			cliente.clear();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/index.fxml"));
+		juego.getChildren().remove(canvas);
+		Parent rt = loader.load();
+		juego.getScene().setRoot(rt);
+		AppController controller = loader.<AppController>getController();
+
+	}
 }

@@ -16,7 +16,7 @@ public class TestRestUser {
 		UserABM sistema= facade.getUserABM();
 		System.out.println(sistema.existeUsuario("mateodecu", "123"));
 		System.out.println(sistema.traerUser(1));
-		System.out.println(sistema.existeUsuario("abish", "123").esAdmin());
+		System.out.println(sistema.existeUsuario("abish", "123"));
 
 		
 	}

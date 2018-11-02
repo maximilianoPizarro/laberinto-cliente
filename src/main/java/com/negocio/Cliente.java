@@ -133,9 +133,10 @@ public class Cliente {
 		return lista;
 	}
 
-	public void conectar() {
+	public void conectar(String usuario) {
 		try {
 			this.echoSocket.connect(this.remoteaddr);
+			enviarDato(usuario);
 		} catch (IOException e) {
 			System.err.println("no se pudo conectar con el servidor");
 		//	System.exit(1);

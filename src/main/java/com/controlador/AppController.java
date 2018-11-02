@@ -138,9 +138,7 @@ public class AppController extends Thread implements Initializable {
 			User user = new User();
 			user.setSsoId(usuarioText.getText());
 			user.setPassword(passwordText.getText());
-			user.setFirstName("usuarioNombre");
-			user.setLastName("usuarioApellido");
-			user.setId(1);
+			
 			Cliente cliente = Cliente.getInstance();
 			if(!cliente.estaCerrada())
 				cliente.conectar(user);
@@ -150,7 +148,7 @@ public class AppController extends Thread implements Initializable {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/bienvenido.fxml"));
 				Parent rt = loader.load();
 				BienvenidoController controller = loader.<BienvenidoController>getController();
-				controller.setUsername("Bienvenido: " + user.getFirstName() + " " + user.getLastName() + "=" + user.getId());
+				controller.setUsername("Bienvenido: " + user.getSsoId());
 				root.getScene().setRoot(rt);
 
 			}else{

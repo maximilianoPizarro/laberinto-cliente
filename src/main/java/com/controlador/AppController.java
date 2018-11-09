@@ -73,6 +73,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+
 public class AppController extends Thread implements Initializable {
 
 	@FXML
@@ -137,7 +140,10 @@ public class AppController extends Thread implements Initializable {
 
 			User user = new User();
 			user.setSsoId(usuarioText.getText());
-			user.setPassword(passwordText.getText());
+			//
+			//ENCRIPTO PASSWORD
+			user.setPassword(DigestUtils.md5Hex(passwordText.getText()));
+			System.out.println("password encriptado: ------------>>>>>>" +  DigestUtils.md5Hex(passwordText.getText()));
 			
 			Cliente cliente = Cliente.getInstance();
 			if(!cliente.estaCerrada())

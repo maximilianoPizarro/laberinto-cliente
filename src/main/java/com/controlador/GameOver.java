@@ -30,20 +30,20 @@ import javafx.stage.Stage;
  */
 public class GameOver {
 	private Popup pp;
-	public GameOver(Canvas canvas) {
-		this.showGameOverPopup(canvas);
+	public GameOver(BienvenidoController controller) {
+		this.showGameOverPopup(controller);
 	}
 	
 	/**
 	 * shows game-over pop-up.
-	 * @param canvas 
+	 * @param controller 
 	 */
 	@SuppressWarnings("restriction")
-	private void showGameOverPopup(Canvas canvas) {
+	private void showGameOverPopup(BienvenidoController controller) {
 		@SuppressWarnings("deprecation")
 		BorderPane content =BorderPaneBuilder.create()
 			 .minWidth(230).minHeight(130)
-			 .bottom(getBottomBox(canvas))
+			 .bottom(getBottomBox(controller))
 			 .center(getCenterBox())
 			 .style(              "-fx-background-color:linear-gradient(darkslategrey, wheat, white);"
 				  + "-fx-background-radius:7;"
@@ -52,7 +52,7 @@ public class GameOver {
 		pp = new Popup();
 		pp.setAutoHide(true);
 		pp.getContent().add(content);
-		pp.show(canvas.getScene().getWindow());
+		pp.show(controller.canvas.getScene().getWindow());
 	}
 	
 	/**
@@ -76,23 +76,24 @@ public class GameOver {
 	 * @param canvas
 	 * @return bottom_box
 	 */
-	private HBox getBottomBox(Canvas canvas) {
+	private HBox getBottomBox(BienvenidoController controller) {
 		@SuppressWarnings("deprecation")
 		HBox bottom = HBoxBuilder.create()
 			 .alignment(Pos.CENTER)
 			 .spacing(10)
 			 .padding(new Insets(5,5,5,5))
-			 .children(getRestartButton(canvas), getQuitButton(canvas))
+			 .children(/*getRestartButton(controller), */getQuitButton(controller))
 			 .build();
 		return bottom;
 	}
 	
 	/**
 	 * 
-	 * @param canvas
+	 * @param controller
 	 * @return restart-button
 	 */
-	public Button getRestartButton(Canvas canvas) {
+	/*
+	public Button getRestartButton(BienvenidoController controller) {
 		@SuppressWarnings("deprecation")
 		Button restart = ButtonBuilder.create().text("Restart")
 				.minWidth(50).minHeight(24)
@@ -101,20 +102,30 @@ public class GameOver {
 				           + "-fx-background-radius:7;"
 					 + "-fx-border-radius:7;")
 				.onAction(e -> {
-					//canvas.salir();
-					System.out.println("SALIR"); 
-					pp.hide();
+
+//						controller.salir();
+						System.out.println("SALIR"); 
+						pp.hide();
+						try {
+							controller.salir();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						// TODO Auto-generated catch block
+
 				})
 				.build();
 		return restart;
 	}
-	
+	*/
 	/**
 	 * 
-	 * @param canvas
+	 * @param controller
 	 * @return exit-button
 	 */
-	public Button getQuitButton(Canvas canvas) {
+	public Button getQuitButton(BienvenidoController controller) {
 		@SuppressWarnings("deprecation")
 		Button quit = ButtonBuilder.create().text("Exit")
 				.minWidth(50).minHeight(24)

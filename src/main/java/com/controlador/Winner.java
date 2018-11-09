@@ -82,7 +82,7 @@ public class Winner {
 			 .alignment(Pos.CENTER)
 			 .spacing(10)
 			 .padding(new Insets(5,5,5,5))
-			 .children(getRestartButton(canvas), getQuitButton(canvas))
+			 .children(/*getRestartButton(canvas),*/ getQuitButton(canvas))
 			 .build();
 		return bottom;
 	}
@@ -92,6 +92,7 @@ public class Winner {
 	 * @param canvas
 	 * @return restart-button
 	 */
+	/*
 	public Button getRestartButton(Canvas canvas) {
 		@SuppressWarnings("deprecation")
 		Button restart = ButtonBuilder.create().text("Restart")
@@ -108,7 +109,7 @@ public class Winner {
 				.build();
 		return restart;
 	}
-	
+	*/
 	/**
 	 * 
 	 * @param canvas

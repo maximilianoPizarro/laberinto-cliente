@@ -362,15 +362,7 @@ public class BienvenidoController implements Initializable {
 							e.printStackTrace();
 						}
 						
-
-						
-						
-					//if (cliente.recibirDato().compareTo("")!=0 && !cliente.estaCerrada()) {
-						//RECIBO LA MATRIZ CORRESPONDIENTE AL PUNTO
-						//}
-       	
-		                // collision detection con "PARED"
-		                Iterator<Sprite> ladrillosIter = ladrillos.iterator();
+						Iterator<Sprite> ladrillosIter = ladrillos.iterator();
 		                while ( ladrillosIter.hasNext() )
 		                {
 		                    Sprite moneybag = ladrillosIter.next();
@@ -510,34 +502,13 @@ public class BienvenidoController implements Initializable {
 		                gc.fillText( pointsText, 360, 36 );
 		                gc.strokeText( pointsText, 360, 36 );
 		                if (score.value < 0) {
-		                	GameOver go = new GameOver(canvas);
+		                	GameOver go = new GameOver(BienvenidoController.this);
    		                }
 
 		            }
 		}.start();
 		
-		
-		//theScene.show();
-
 	}
-
-	/*
-	 * @FXML public void handleOnKeyPressed(KeyEvent event) { if
-	 * (event.getCode() == KeyCode.LEFT)
-	 * personaje.setTranslateX(personaje.getTranslateX() - 1); if
-	 * (event.getCode() == KeyCode.RIGHT)
-	 * personaje.setTranslateX(personaje.getTranslateX() + 1); if
-	 * (event.getCode() == KeyCode.UP)
-	 * personaje.setTranslateY(personaje.getTranslateY() - 1); if
-	 * (event.getCode() == KeyCode.DOWN)
-	 * personaje.setTranslateY(personaje.getTranslateY() + 1);
-	 * 
-	 * new Thread(new Semaforo(personaje.getTranslateX() + ":" +
-	 * personaje.getTranslateY())).start();
-	 * 
-	 * //System.out.println(personaje.getTranslateX() + ":" +
-	 * personaje.getTranslateY()); //System.out.println(personaje); }
-	 */
 
 	@FXML
 	protected void salir(ActionEvent event) throws IOException {

@@ -166,7 +166,7 @@ public class BienvenidoController implements Initializable {
 		
 
     // For example
-		iniciarMusica();
+	//	iniciarMusica();
 		
 		ArrayList<String> input = new ArrayList<String>();
 

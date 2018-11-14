@@ -44,6 +44,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -52,6 +53,7 @@ import com.negocio.Cliente;
 import com.negocio.Facade;
 import com.negocio.UserABM;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -74,7 +76,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import org.apache.commons.codec.digest.DigestUtils;
-
 
 public class AppController extends Thread implements Initializable {
 
@@ -101,6 +102,14 @@ public class AppController extends Thread implements Initializable {
 
 	@FXML
 	private Label copyright;
+
+	@FXML
+	private ListView<String> consolaList = new ListView<String>();
+
+	private ArrayList<String> lista = new ArrayList<String>();
+
+	@FXML
+	private TextField consolaText;
 
 	@FXML
 	private ListView<String> list = new ListView<String>();
@@ -141,23 +150,23 @@ public class AppController extends Thread implements Initializable {
 			User user = new User();
 			user.setSsoId(usuarioText.getText());
 			//
-			//ENCRIPTO PASSWORD
+			// ENCRIPTO PASSWORD
 			user.setPassword(DigestUtils.md5Hex(passwordText.getText()));
-			System.out.println("password encriptado: ------------>>>>>>" +  DigestUtils.md5Hex(passwordText.getText()));
-			
+			System.out.println("password encriptado: ------------>>>>>>" + DigestUtils.md5Hex(passwordText.getText()));
+
 			Cliente cliente = Cliente.getInstance();
-			if(!cliente.estaCerrada())
+			if (!cliente.estaCerrada())
 				cliente.conectar(user);
-			//System.out.println(cliente.recibirDato());		
-			
-			if (cliente.recibirDato().compareTo("autenticado")==0 && !cliente.estaCerrada()) {
+			// System.out.println(cliente.recibirDato());
+
+			if (cliente.recibirDato().compareTo("autenticado") == 0 && !cliente.estaCerrada()) {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/bienvenido.fxml"));
 				Parent rt = loader.load();
 				BienvenidoController controller = loader.<BienvenidoController>getController();
 				controller.setUsername("Bienvenido: " + user.getSsoId());
 				root.getScene().setRoot(rt);
 
-			}else{
+			} else {
 				cliente.clear();
 				cliente.desconectar();
 				copyright.setVisible(false);
@@ -175,10 +184,74 @@ public class AppController extends Thread implements Initializable {
 
 	}
 
+	@FXML
+	protected void consola(ActionEvent event) {
+		Stage stage = (Stage) root.getScene().getWindow();
+
+		Cliente cliente = Cliente.getInstance();
+		
+		System.out.println(cliente.estaConectado());
+		
+		// {"ssoId":"admin","password":"21232f297a57a5a743894a0e4a801fc3"}
+		if (!cliente.estaConectado()) {
+
+			cliente.conectar(consolaText.getText());
+			consolaText.clear();
+			try {
+				lista.add(cliente.recibirDato());
+				if (mensajesDeError("usuario no encontrado")||mensajesDeError("ERROR 504: USUARIO MAL FORMADO")) {
+					cliente.desconectar();
+					cliente.clear();
+					consolaText.clear();
+				} 
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+		} else {
+			try { // {"positionX":0.0,"positionY":0.0}
+				//if(!mensajesDeError("ERROR AL TRANSFORMAR STRING")){
+					lista.add("Ingrese comando para enviar {\"positionX\":0.0,\"positionY\":0.0}");
+					consolaList.setItems(FXCollections.observableArrayList(lista));
+					consolaList.refresh();					
+					cliente.enviarDato(consolaText.getText());					
+					lista.add(cliente.recibirDato());
+					consolaList.setItems(FXCollections.observableArrayList(lista));
+					consolaList.refresh();
+					consolaText.clear();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				// PrintToTextArea.create(consola);
+				consolaList.setItems(FXCollections.observableArrayList(lista));
+
+			}
+		});
+
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) { // TODO }
 
+		lista.add("Ingrese usuario {\"ssoId\":\"tuNombre\",\"password\":\"tuClave\"}");
+		consolaList.setItems(FXCollections.observableArrayList(lista));
+
 	}
+	
+	
+	public boolean mensajesDeError(String mensaje){
+		boolean respuesta=false;
+		if(lista.get(lista.size() - 1).compareTo(mensaje)==0) respuesta=true;
+		
+		return respuesta;
+	}
+	
 
 	@Override
 	public void run() {
@@ -187,12 +260,17 @@ public class AppController extends Thread implements Initializable {
 
 	@FXML
 	protected void salir(ActionEvent event) throws IOException {
-		Cliente.getInstance().desconectar();
+		Cliente cliente = Cliente.getInstance();
+		if (cliente != null) {// cliente.desconectar();
+			cliente.clear();
+		}
+
 		Stage stage = (Stage) root.getScene().getWindow();
 		stage.close();
 		System.exit(1);
 
 	}
+
 	protected void salir() throws IOException {
 		Cliente.getInstance().desconectar();
 		Stage stage = (Stage) root.getScene().getWindow();

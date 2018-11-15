@@ -227,7 +227,7 @@ public class AppController extends Thread implements Initializable {
 					if (mensajesDeError("ERROR 503: USUARIO Y/O CONTRASEÑA INCORRECTO/S")
 							|| mensajesDeError("ERROR 501: PROTOCOLO USUARIO INCORRECTO")
 							|| mensajesDeError("ERROR 504: PROTOCOLO INVALIDO")
-					/* || mensajesDeError("ERROR 500: CADENA MAL FORMADA") */) {
+					 || mensajesDeError("ERROR 505: ERROR FORMATO PUNTO" )) {
 
 						System.out.println("ERROR");
 						cliente.desconectar();

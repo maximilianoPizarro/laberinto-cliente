@@ -193,34 +193,55 @@ public class AppController extends Thread implements Initializable {
 		System.out.println(cliente.estaConectado());
 		
 		// {"ssoId":"admin","password":"21232f297a57a5a743894a0e4a801fc3"}
-		if (!cliente.estaConectado()) {
-
-			cliente.conectar(consolaText.getText());
-			consolaText.clear();
-			try {
-				lista.add(cliente.recibirDato());
-				if (mensajesDeError("usuario no encontrado")||mensajesDeError("ERROR 504: USUARIO MAL FORMADO")) {
-					cliente.desconectar();
-					cliente.clear();
-					consolaText.clear();
-				} 
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-
-		} else {
-			try { // {"positionX":0.0,"positionY":0.0}
-				//if(!mensajesDeError("ERROR AL TRANSFORMAR STRING")){
-					lista.add("Ingrese comando para enviar {\"positionX\":0.0,\"positionY\":0.0}");
-					consolaList.setItems(FXCollections.observableArrayList(lista));
-					consolaList.refresh();					
-					cliente.enviarDato(consolaText.getText());					
+		if (consolaText.getText().compareTo("") != 0) {
+			if (!cliente.estaConectado()) {
+				//System.out.println(consolaText.getText());
+				cliente.conectar(consolaText.getText());
+				consolaText.clear();
+				try {
 					lista.add(cliente.recibirDato());
-					consolaList.setItems(FXCollections.observableArrayList(lista));
-					consolaList.refresh();
-					consolaText.clear();
-			} catch (IOException e) {
-				e.printStackTrace();
+					if (mensajesDeError("ERROR 503: USUARIO Y/O CONTRASEÑA INCORRECTO/S")||mensajesDeError("ERROR 501: PROTOCOLO USUARIO INCORRECTO")|| mensajesDeError("ERROR 504: PROTOCOLO INVALIDO")
+							 /*|| mensajesDeError("ERROR 500: CADENA MAL FORMADA")*/) {
+						
+						System.out.println("ERROR");
+						cliente.desconectar();
+						cliente.clear();
+						consolaText.clear();
+					} 
+					else { //SINO HAY MENSAJE DE ERROR, autentica --> recibo matriz inicial 
+						
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+	
+			} else {
+				try { // {"positionX":0.0,"positionY":0.0}
+					//if(!mensajesDeError("ERROR AL TRANSFORMAR STRING")){
+					lista.add("Ingrese comando para enviar {\"positionX\":0.0,\"positionY\":0.0}");
+					consolaList.setItems(FXCollections.observableArrayList(lista)); 
+					consolaList.refresh();					
+					cliente.enviarDato(consolaText.getText());
+
+					lista.add(cliente.recibirDato());
+					if (mensajesDeError("ERROR 503: USUARIO Y/O CONTRASEÑA INCORRECTO/S")
+							|| mensajesDeError("ERROR 501: PROTOCOLO USUARIO INCORRECTO")
+							|| mensajesDeError("ERROR 504: PROTOCOLO INVALIDO")
+					/* || mensajesDeError("ERROR 500: CADENA MAL FORMADA") */) {
+
+						System.out.println("ERROR");
+						cliente.desconectar();
+						cliente.clear();
+						consolaText.clear();
+					} else { // SINO HAY MENSAJE DE ERROR, autentica --> recibo matriz inicial
+						consolaList.setItems(FXCollections.observableArrayList(lista));
+						consolaList.refresh();
+						consolaText.clear();
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 		}

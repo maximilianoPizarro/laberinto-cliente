@@ -131,15 +131,16 @@ public class BienvenidoController implements Initializable {
 		juego.getChildren().add(canvas);
 		Cliente cliente = Cliente.getInstance();
 		
-		try {
-			System.out.println(cliente.recibirDato());
-			System.out.println("recibo!");
-			
-		} catch (IOException e2) {
-			System.out.println("error al recibir el laberinto");
-		}
-		
-		
+		/* 14-11-18
+//		try {
+//			System.out.println(cliente.recibirDato());
+//			System.out.println("recibo!");
+//			
+//		} catch (IOException e2) {
+//			System.out.println("error al recibir el laberinto");
+//		}
+//		
+		*/
 		
 		//PEDIR dato a partir del punto
 		if(!cliente.estaCerrada()) {

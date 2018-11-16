@@ -15,7 +15,7 @@ import com.modelo.Punto;
 import com.modelo.User;
 
 public class Cliente {
-	private static String host = "192.168.0.6";
+	private static String host = "127.0.0.1";
 	private static int port = 8081;
 	private Socket echoSocket;
 	private SocketAddress remoteaddr;
